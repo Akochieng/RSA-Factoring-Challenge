@@ -11,8 +11,7 @@ size_t numcon(char *s)
 	char *del = " \n";
 
 	temp = strtok(s, del);
-	printf("converting %s\n", temp);
-	return (strtonum(s));
+	return (strtonum(temp));
 }
 /**
   *strtonum - simple function to convert a string to a number

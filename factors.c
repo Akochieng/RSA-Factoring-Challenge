@@ -68,5 +68,5 @@ void calcproduct(size_t num)
 			a = a + 2;
 		}
 	}
-	printf("%lu=%lu*%lu\n", num, a, b);
+	printf("%lu=%lu*%lu\n", num, b, a);
 }
