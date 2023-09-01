@@ -14,6 +14,8 @@ int main(int argc, char **argv)
 	readbuf = NULL;
 	file = NULL;
 	atexit(cleanup);
+	add_node(2);
+	add_node(3);
 	if (argc != 2)
 	{
 		fprintf(stderr, "Usage %s <file>\n", argv[0]);
@@ -37,12 +39,14 @@ void cleanup(void)
 {
 	fclose(file);
 	free(readbuf);
+	freelist();
 }
 /**
-  *printans - prints the result of the program
+  *printans - print the answer in the function
   *@num: the number
-  *@a: the first number
-  *@b: the second number
+  *@a: the value a
+  *@b: the value b
+  *
   *Return: void
   */
 void printans(size_t num, size_t a, size_t b)
@@ -57,27 +61,39 @@ void printans(size_t num, size_t a, size_t b)
   */
 void calcproduct(size_t num)
 {
-	size_t a = 2;
-	size_t b = 0;
+	size_t a, b, halfn;
+	primeno *cur;
 
-	if (num % a == 0)
-		b = num / a;
-	else if (num % 3 == 0)
+	a = b = 1;
+	cur = head;
+	while (cur)
 	{
-		a = 3;
-		b = num / a;
-	}
-	else
-	{
-		for (a = 5; a < num / 2; )
+		if (num % cur->n == 0)
 		{
-			if (num % a == 0)
+			a = cur->n;
+			b = num / a;
+			if (is_prime(b))
 			{
-				b = num / a;
-				break;
+				add_node(b);
+				printans(num, a, b);
+				return;
 			}
-			a = a + 2;
 		}
+		cur = cur->next;
 	}
-	printans(num, a, b);
+	halfn = num / 2;
+	for ( ; a < halfn; a += 2)
+		if (num % a == 0)
+			if (is_prime(a))
+			{
+				add_node(a);
+				b = num / a;
+				if (is_prime(b))
+				{
+					add_node(b);
+					printans(num, a, b);
+					return;
+				}
+			}
+	printans(num, 1, num);
 }
